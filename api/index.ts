@@ -1,7 +1,11 @@
-import app from '../src/app';  // import your Express app
+import { createServer } from 'http';
+import app from '../src/app';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { parse } from 'url';
 
-// Export Vercel compatible handler
+const server = createServer(app);
+
 export default function handler(req: VercelRequest, res: VercelResponse) {
-  app(req, res);
+  const parsedUrl = parse(req.url!, true);
+  server.emit('request', req, res);
 }
